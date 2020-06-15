@@ -39,6 +39,7 @@ public class FileManager {
     public int numberOfBugsInTotal(int row, int column) {
         File file = this.fileList.get(row * numberOfFilesInRow + column);
         if (file.containsBug()) {
+            Log.e("File contains bug being checked", row + ", " + column);
             return numberOfBugsInRow(row) + numberOfBugsInColumn(column) - 1;
         } else {
             return numberOfBugsInRow(row) + numberOfBugsInColumn(column);
@@ -48,7 +49,7 @@ public class FileManager {
     public int numberOfBugsInRow(int row) {
         int bugCount = 0;
         for (int columnIndex = 0; columnIndex < numberOfFilesInRow; columnIndex ++) {
-            File file = fileList.get(row + columnIndex);
+            File file = fileList.get(row * numberOfFilesInRow + columnIndex);
             if (file.containsBug()) {
                 bugCount ++;
             }
@@ -73,5 +74,13 @@ public class FileManager {
 
     public Boolean containsBugAt(int row, int column) {
         return this.fileList.get(row * numberOfFilesInRow + column).containsBug();
+    }
+
+    public void markInvestigated(int row, int column) {
+        this.fileList.get(row * numberOfFilesInRow + column).gotInvestigated();
+    }
+
+    public Boolean hasBeenInvestigatedAt(int row, int column) {
+        return this.fileList.get(row * numberOfFilesInRow + column).isInvestigated();
     }
 }

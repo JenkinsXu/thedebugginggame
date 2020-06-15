@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
     private FileManager fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
 
     FloatingActionButton buttons[][] = new FloatingActionButton[NUM_ROWS][NUM_COLS];
+    Integer buttonsClickCount[][] = new Integer[NUM_ROWS][NUM_COLS];
+    private int totalInvestigation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,8 @@ public class GameActivity extends AppCompatActivity {
             for (int col = 0; col < NUM_COLS; col++) {
                 final int FINAL_ROW = row;
                 final int FINAL_COL = col;
+
+                buttonsClickCount[row][col] = 0;
 
                 FloatingActionButton button = new FloatingActionButton(this);
                 TableRow.LayoutParams buttonLayoutParams = new TableRow.LayoutParams(
@@ -81,19 +88,69 @@ public class GameActivity extends AppCompatActivity {
 
     private void gridButtonClicked(int row, int col) {
         FloatingActionButton button = buttons[row][col];
+        buttonsClickCount[row][col]++;
+        int currentButtonClickCount = buttonsClickCount[row][col];
+        Log.e("Update click count", row + ", " + col + " to " + currentButtonClickCount);
 
         if (fileManager.containsBugAt(row, col)) {
-            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
-                    "#f0518e")));
-            button.setImageDrawable(
-                    ContextCompat.getDrawable(this, R.drawable.ic_adb));
-            Toast.makeText(
-                    this,
-                    "You handled a " + BugNameGenerator.getRandomBugName() + "!",
-                    Toast.LENGTH_SHORT).show();
+
+            if (currentButtonClickCount == 1) {
+                button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
+                        "#f0518e")));
+                button.setImageDrawable(
+                        ContextCompat.getDrawable(this, R.drawable.ic_adb));
+                Toast.makeText(
+                        this,
+                        "You handled a " + BugNameGenerator.getRandomBugName() + "!",
+                        Toast.LENGTH_SHORT).show();
+                fileManager.debug(row, col);
+
+                // update number
+                for (int rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++) {
+                    for (int columnIndex = 0; columnIndex < NUM_COLS; columnIndex++) {
+                        if (fileManager.hasBeenInvestigatedAt(rowIndex, columnIndex)) {
+                            buttons[rowIndex][columnIndex].setImageBitmap(
+                                    textAsBitmap("" + fileManager.numberOfBugsInTotal(rowIndex, columnIndex),
+                                            70, Color.WHITE));
+                        }
+                    }
+                }
+            }
         } else {
-            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
-                    "#7a41fa")));
+            if (currentButtonClickCount == 1) {
+                button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
+                        "#7a41fa")));
+                totalInvestigation++;
+                fileManager.markInvestigated(row, col);
+                button.setImageBitmap(
+                        textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
+                                70, Color.WHITE));
+            } else if (currentButtonClickCount == 2) {
+                if (!fileManager.hasBeenInvestigatedAt(row, col)) {
+                    totalInvestigation++;
+                    fileManager.markInvestigated(row, col);
+                    button.setImageBitmap(
+                            textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
+                                    70, Color.WHITE));
+                }
+            }
         }
+    }
+
+    // For displaying text in a FAB
+    // Citation: https://stackoverflow.com/a/39965170
+    public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 }
