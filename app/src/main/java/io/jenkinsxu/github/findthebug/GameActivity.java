@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,13 +26,17 @@ import io.jenkinsxu.github.findthebug.model.FileManager;
 public class GameActivity extends AppCompatActivity {
 
     private static final int NUM_ROWS = 4;
-    private static final int NUM_COLS = 8;
+    private static final int NUM_COLS = 7;
     private static final int NUM_BUGS = 4; // for testing only
     private FileManager fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
 
     FloatingActionButton buttons[][] = new FloatingActionButton[NUM_ROWS][NUM_COLS];
     Integer buttonsClickCount[][] = new Integer[NUM_ROWS][NUM_COLS];
-    private int totalInvestigation = 0;
+    private int totalBugs = NUM_BUGS;
+    private int totalScans = 0;
+
+    TextView bugCount;
+    TextView scanCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         populateButtons();
+        bugCount = (TextView)findViewById(R.id.bugCount);
+        scanCount = (TextView)findViewById(R.id.scanCount);
+        bugCount.setText(totalBugs + "/" + NUM_BUGS);
+        scanCount.setText("" + totalScans);
     }
 
     private void populateButtons() {
@@ -68,7 +77,7 @@ public class GameActivity extends AppCompatActivity {
                         1.0f);
                 buttonLayoutParams.setMargins(30, 30, 30, 35);
                 button.setLayoutParams(buttonLayoutParams);
-                button.setCustomSize(120);
+                button.setCustomSize(110);
                 button.setScaleType(ImageView.ScaleType.CENTER);
                 button.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.ic_folder));
@@ -104,6 +113,7 @@ public class GameActivity extends AppCompatActivity {
                         "You handled a " + BugNameGenerator.getRandomBugName() + "!",
                         Toast.LENGTH_SHORT).show();
                 fileManager.debug(row, col);
+                reduceBugCount();
 
                 // update number
                 for (int rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++) {
@@ -120,14 +130,14 @@ public class GameActivity extends AppCompatActivity {
             if (currentButtonClickCount == 1) {
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
                         "#7a41fa")));
-                totalInvestigation++;
+                increaseScanCount();
                 fileManager.markInvestigated(row, col);
                 button.setImageBitmap(
                         textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
                                 70, Color.WHITE));
             } else if (currentButtonClickCount == 2) {
                 if (!fileManager.hasBeenInvestigatedAt(row, col)) {
-                    totalInvestigation++;
+                    increaseScanCount();
                     fileManager.markInvestigated(row, col);
                     button.setImageBitmap(
                             textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
@@ -152,5 +162,15 @@ public class GameActivity extends AppCompatActivity {
         Canvas canvas = new Canvas(image);
         canvas.drawText(text, 0, baseline, paint);
         return image;
+    }
+
+    private void reduceBugCount() {
+        totalBugs--;
+        bugCount.setText(this.totalBugs + "/" + NUM_BUGS);
+    }
+
+    private void increaseScanCount() {
+        totalScans++;
+        scanCount.setText("" + this.totalScans);
     }
 }
