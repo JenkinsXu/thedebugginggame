@@ -3,6 +3,9 @@ package io.jenkinsxu.github.findthebug;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -20,7 +24,10 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DecimalFormat;
+
 import io.jenkinsxu.github.findthebug.model.BugNameGenerator;
+import io.jenkinsxu.github.findthebug.model.File;
 import io.jenkinsxu.github.findthebug.model.FileManager;
 
 public class GameActivity extends AppCompatActivity {
@@ -50,7 +57,7 @@ public class GameActivity extends AppCompatActivity {
         bugCount = (TextView)findViewById(R.id.bugCount);
         scanCount = (TextView)findViewById(R.id.scanCount);
         bugCount.setText(totalBugs + "/" + NUM_BUGS);
-        scanCount.setText("" + totalScans);
+        scanCount.setText(formatTwoDigit(totalScans));
     }
 
     private void populateButtons() {
@@ -144,6 +151,7 @@ public class GameActivity extends AppCompatActivity {
                                     70, Color.WHITE));
                 }
             }
+            animateScan(row, col);
         }
     }
 
@@ -171,6 +179,42 @@ public class GameActivity extends AppCompatActivity {
 
     private void increaseScanCount() {
         totalScans++;
-        scanCount.setText("" + this.totalScans);
+        scanCount.setText(formatTwoDigit(this.totalScans));
+    }
+
+    private void startButtonAnimation(int row, int col) {
+        FloatingActionButton button = buttons[row][col];
+
+        ObjectAnimator animation = ObjectAnimator.ofFloat(button, "alpha", 1f, 0.3f);
+        animation.setRepeatCount(1);
+        animation.setRepeatMode(ObjectAnimator.REVERSE);
+        animation.setDuration(300);
+        animation.start();
+    }
+
+    private void animateScan(int row, int col) {
+        animateRow(row, col);
+        animateColumn(row, col);
+    }
+
+    private void animateRow(int row, int excludeColumn) {
+        for (int columnIndex = 0; columnIndex < NUM_COLS; columnIndex ++) {
+            if (columnIndex != excludeColumn) {
+                startButtonAnimation(row, columnIndex);
+            }
+        }
+    }
+
+    private void animateColumn(int excludeRow, int column) {
+        for (int rowIndex = 0; rowIndex < NUM_ROWS; rowIndex ++) {
+            if (rowIndex != excludeRow) {
+                startButtonAnimation(rowIndex, column);
+            }
+        }
+    }
+
+    private String formatTwoDigit(int number) {
+        DecimalFormat df = new DecimalFormat("00");
+        return df.format(number);
     }
 }
