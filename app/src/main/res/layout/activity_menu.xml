@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity">
+
+    <TextView
+        android:id="@+id/gameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:text="Debugger"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#6C63FF"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="#6451FE"
+        android:text="Start"
+        android:textColor="#F9F8FF"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/gameName"
+        app:layout_constraintTop_toBottomOf="@+id/gameName" />
+
+    <Button
+        android:id="@+id/helpButton"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#EEEDF8"
+        android:text="Help"
+        android:textColor="#A3A2A2"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/startButton"
+        app:layout_constraintTop_toBottomOf="@+id/startButton" />
+
+    <Button
+        android:id="@+id/optionButton"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#EEEDF8"
+        android:text="Option"
+        android:textColor="#A3A2A2"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/helpButton"
+        app:layout_constraintTop_toBottomOf="@+id/helpButton" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="32dp"
+        android:scaleX="0.90"
+        android:scaleY="0.90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/background_programmer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

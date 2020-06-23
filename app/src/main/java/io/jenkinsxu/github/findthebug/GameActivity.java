@@ -33,8 +33,8 @@ import io.jenkinsxu.github.findthebug.model.FileManager;
 public class GameActivity extends AppCompatActivity {
 
     private static final int NUM_ROWS = 4;
-    private static final int NUM_COLS = 7;
-    private static final int NUM_BUGS = 4; // for testing only
+    private static final int NUM_COLS = 6;
+    private static final int NUM_BUGS = 6; // for testing only
     private FileManager fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
 
     FloatingActionButton buttons[][] = new FloatingActionButton[NUM_ROWS][NUM_COLS];
@@ -82,9 +82,10 @@ public class GameActivity extends AppCompatActivity {
                         TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT,
                         1.0f);
-                buttonLayoutParams.setMargins(30, 30, 30, 35);
+                int marginSize = getButtonMargin("small");
+                buttonLayoutParams.setMargins(marginSize, marginSize, marginSize, marginSize);
                 button.setLayoutParams(buttonLayoutParams);
-                button.setCustomSize(110);
+//                button.setCustomSize(50);
                 button.setScaleType(ImageView.ScaleType.CENTER);
                 button.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.ic_folder));
@@ -216,5 +217,16 @@ public class GameActivity extends AppCompatActivity {
     private String formatTwoDigit(int number) {
         DecimalFormat df = new DecimalFormat("00");
         return df.format(number);
+    }
+
+    private int getButtonMargin(String gridSize) {
+        switch (gridSize) {
+            case "medium":
+                return 15;
+            case "large":
+                return 5;
+            default:
+                return 30;
+        }
     }
 }
