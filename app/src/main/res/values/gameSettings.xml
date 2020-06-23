@@ -6,5 +6,13 @@
         <item>66</item>
     </integer-array>
 
-    <integer name="default_size">24</integer>
+    <integer-array name="bugs_number">
+        <item>6</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </integer-array>
+
+    <integer name="default_grid_size">24</integer>
+    <integer name="default_bug_number">6</integer>
 </resources>

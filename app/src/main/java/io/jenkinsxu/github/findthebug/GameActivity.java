@@ -36,12 +36,12 @@ public class GameActivity extends AppCompatActivity {
 
     private static int NUM_ROWS = 4;
     private static int NUM_COLS = 6;
-    private static final int NUM_BUGS = 6; // for testing only
+    private static int NUM_BUGS = 6;
     private FileManager fileManager;
 
     FloatingActionButton buttons[][];
     Integer buttonsClickCount[][];
-    private int totalBugs = NUM_BUGS;
+    private int totalBugs;
     private int totalScans = 0;
 
     TextView bugCount;
@@ -56,11 +56,17 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         setGridSize();
+        setBugsNumber();
         populateButtons();
         bugCount = (TextView)findViewById(R.id.bugCount);
         scanCount = (TextView)findViewById(R.id.scanCount);
         bugCount.setText(totalBugs + "/" + NUM_BUGS);
         scanCount.setText(formatTwoDigit(totalScans));
+    }
+
+    private void setBugsNumber() {
+        NUM_BUGS = OptionActivity.getBugsNumber(this);
+        totalBugs = NUM_BUGS;
     }
 
     private void setGridSize() {
