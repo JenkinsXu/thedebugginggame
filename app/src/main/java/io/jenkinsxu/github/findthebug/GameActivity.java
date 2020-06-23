@@ -2,6 +2,7 @@ package io.jenkinsxu.github.findthebug;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
@@ -208,6 +209,17 @@ public class GameActivity extends AppCompatActivity {
     private void reduceBugCount() {
         totalBugs--;
         bugCount.setText(this.totalBugs + "/" + NUM_BUGS);
+        if (totalBugs == 0) {
+            showCongratulationMessage();
+        }
+    }
+
+    private void showCongratulationMessage() {
+        FragmentManager manager = getSupportFragmentManager();
+        MessageFragment dialog = new MessageFragment();
+        dialog.show(manager, "MessageDialog");
+
+        Log.i("TAG", "Dialog shown");
     }
 
     private void increaseScanCount() {
@@ -255,7 +267,7 @@ public class GameActivity extends AppCompatActivity {
     private int getButtonMargin() {
         switch (OptionActivity.getGridSize(this)) {
             case 40:
-                return 15;
+                return 20;
             case 66:
                 return 18;
             default:
