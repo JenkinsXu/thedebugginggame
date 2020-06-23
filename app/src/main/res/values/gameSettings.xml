@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="grid_size">
+        <item>24</item>
+        <item>50</item>
+        <item>90</item>
+    </integer-array>
+
+    <integer name="default_size">24</integer>
+</resources>

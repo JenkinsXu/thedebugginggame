@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -32,13 +34,13 @@ import io.jenkinsxu.github.findthebug.model.FileManager;
 
 public class GameActivity extends AppCompatActivity {
 
-    private static final int NUM_ROWS = 4;
-    private static final int NUM_COLS = 6;
+    private static int NUM_ROWS = 4;
+    private static int NUM_COLS = 6;
     private static final int NUM_BUGS = 6; // for testing only
     private FileManager fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
 
-    FloatingActionButton buttons[][] = new FloatingActionButton[NUM_ROWS][NUM_COLS];
-    Integer buttonsClickCount[][] = new Integer[NUM_ROWS][NUM_COLS];
+    FloatingActionButton buttons[][];
+    Integer buttonsClickCount[][];
     private int totalBugs = NUM_BUGS;
     private int totalScans = 0;
 
@@ -53,6 +55,7 @@ public class GameActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
+        setGridSize();
         populateButtons();
         bugCount = (TextView)findViewById(R.id.bugCount);
         scanCount = (TextView)findViewById(R.id.scanCount);
@@ -60,8 +63,31 @@ public class GameActivity extends AppCompatActivity {
         scanCount.setText(formatTwoDigit(totalScans));
     }
 
+    private void setGridSize() {
+        // Refresh bug count
+        int size = OptionActivity.getGridSize(this);
+        switch (size) {
+            case 24:
+                NUM_ROWS = 4;
+                NUM_COLS = 6;
+                break;
+            case 50:
+                NUM_ROWS = 5;
+                NUM_COLS = 10;
+                break;
+            case 90:
+                NUM_ROWS = 6;
+                NUM_COLS = 15;
+                break;
+            default:
+        }
+    }
+
     private void populateButtons() {
+        buttons = new FloatingActionButton[NUM_ROWS][NUM_COLS];
+        buttonsClickCount = new Integer[NUM_ROWS][NUM_COLS];
         TableLayout table = (TableLayout) findViewById(R.id.tableForButtons);
+
         for (int row = 0; row < NUM_ROWS; row++) {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new TableLayout.LayoutParams(
@@ -85,7 +111,6 @@ public class GameActivity extends AppCompatActivity {
                 int marginSize = getButtonMargin("small");
                 buttonLayoutParams.setMargins(marginSize, marginSize, marginSize, marginSize);
                 button.setLayoutParams(buttonLayoutParams);
-//                button.setCustomSize(50);
                 button.setScaleType(ImageView.ScaleType.CENTER);
                 button.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.ic_folder));
@@ -219,6 +244,7 @@ public class GameActivity extends AppCompatActivity {
         return df.format(number);
     }
 
+    // for testing only
     private int getButtonMargin(String gridSize) {
         switch (gridSize) {
             case "medium":
@@ -228,5 +254,15 @@ public class GameActivity extends AppCompatActivity {
             default:
                 return 30;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setGridSize();
+    }
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, GameActivity.class);
     }
 }
