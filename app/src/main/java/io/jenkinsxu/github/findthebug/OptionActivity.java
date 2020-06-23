@@ -32,7 +32,7 @@ public class OptionActivity extends AppCompatActivity {
         for (int i = 0; i < bugsNumber.length; i++) {
             final int SIZE = bugsNumber[i];
             RadioButton button = new RadioButton(this);
-            button.setText("Number of bugs: " + SIZE);
+            button.setText("" + SIZE);
 
             // Set on-click callbacks
             button.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +61,7 @@ public class OptionActivity extends AppCompatActivity {
         for (int i = 0; i < gridSize.length; i++) {
             final int SIZE = gridSize[i];
             RadioButton button = new RadioButton(this);
-            button.setText("Number of cells: " + SIZE);
+            button.setText("" + SIZE);
 
             // Set on-click callbacks
             button.setOnClickListener(new View.OnClickListener() {
