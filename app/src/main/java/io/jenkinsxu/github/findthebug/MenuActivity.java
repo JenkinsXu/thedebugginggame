@@ -16,7 +16,10 @@ public class MenuActivity extends AppCompatActivity {
 
         setupStartButton();
         setupOptionsButton();
+        setupHelpButton();
     }
+
+    // TODO: Clean up duplicate code
 
     private void setupStartButton() {
         Button button = (Button) findViewById(R.id.startButton);
@@ -35,6 +38,17 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = OptionActivity.makeIntent(MenuActivity.this);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupHelpButton() {
+        Button button = (Button) findViewById(R.id.helpButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = HelpActivity.makeIntent(MenuActivity.this);
                 startActivity(intent);
             }
         });
