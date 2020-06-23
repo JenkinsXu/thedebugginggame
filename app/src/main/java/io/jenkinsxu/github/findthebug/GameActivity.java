@@ -37,7 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private static int NUM_ROWS = 4;
     private static int NUM_COLS = 6;
     private static final int NUM_BUGS = 6; // for testing only
-    private FileManager fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
+    private FileManager fileManager;
 
     FloatingActionButton buttons[][];
     Integer buttonsClickCount[][];
@@ -71,19 +71,20 @@ public class GameActivity extends AppCompatActivity {
                 NUM_ROWS = 4;
                 NUM_COLS = 6;
                 break;
-            case 50:
+            case 40:
                 NUM_ROWS = 5;
-                NUM_COLS = 10;
+                NUM_COLS = 8;
                 break;
-            case 90:
+            case 66:
                 NUM_ROWS = 6;
-                NUM_COLS = 15;
+                NUM_COLS = 11;
                 break;
             default:
         }
     }
 
     private void populateButtons() {
+        fileManager = new FileManager(NUM_COLS, NUM_ROWS, NUM_BUGS);
         buttons = new FloatingActionButton[NUM_ROWS][NUM_COLS];
         buttonsClickCount = new Integer[NUM_ROWS][NUM_COLS];
         TableLayout table = (TableLayout) findViewById(R.id.tableForButtons);
@@ -108,7 +109,7 @@ public class GameActivity extends AppCompatActivity {
                         TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT,
                         1.0f);
-                int marginSize = getButtonMargin("small");
+                int marginSize = getButtonMargin();
                 buttonLayoutParams.setMargins(marginSize, marginSize, marginSize, marginSize);
                 button.setLayoutParams(buttonLayoutParams);
                 button.setScaleType(ImageView.ScaleType.CENTER);
@@ -245,12 +246,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // for testing only
-    private int getButtonMargin(String gridSize) {
-        switch (gridSize) {
-            case "medium":
+    private int getButtonMargin() {
+        switch (OptionActivity.getGridSize(this)) {
+            case 40:
                 return 15;
-            case "large":
-                return 5;
+            case 66:
+                return 18;
             default:
                 return 30;
         }

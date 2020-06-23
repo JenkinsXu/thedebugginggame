@@ -82,11 +82,12 @@
         android:id="@+id/tableForButtons"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="32dp"
         android:padding="16dp"
         android:stretchColumns="*"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scanCount"
+        app:layout_constraintStart_toEndOf="@+id/timeValue"
         app:layout_constraintTop_toTopOf="parent">
 
     </TableLayout>
