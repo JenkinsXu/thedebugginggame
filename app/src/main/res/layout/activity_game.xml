@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:rotation="-90"
-        android:text="Bugs"
+        android:text="@string/bugs"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:rotation="-90"
-        android:text="0/4"
+        android:text="@string/initial_bugcount"
         android:textColor="#F24D8E"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/bugLabel"

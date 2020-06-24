@@ -10,4 +10,19 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save_button">Save</string>
+    <string name="bugs">Bugs</string>
+    <string name="initial_bugcount">0/4</string>
+    <string name="help_info">Bugs in files? As a programmer you can solve these problems! I have written a scan script for you, all you have to do is click on one of the files, and it will do a scan and show you how many bugs in the same column and row. You can also adjust the difficulty by using the Option Screen. Use your ingenuity to solve the problem!</string>
+    <string name="help_title">Welcome our new programmer!</string>
+    <string name="help_extra">Website: https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt276/home\nDeveloper: Yongqi Xu\nDesign Resourse: undraw.co</string>
+    <string name="game_title">Debugger</string>
+    <string name="start">Start</string>
+    <string name="help">Help</string>
+    <string name="option">Option</string>
+    <string name="number_of_bugs">Number of Bugs</string>
+    <string name="number_of_cells">Number of Cells</string>
+    <string name="welcome_title">Debugger</string>
+    <string name="by_yongqi_xu">By Yongqi Xu</string>
+    <string name="skip">Skip</string>
+    <string name="congra_message">You fixed all the bugs!</string>
 </resources>
