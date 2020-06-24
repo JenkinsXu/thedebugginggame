@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,11 +12,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -30,7 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.text.DecimalFormat;
 
 import io.jenkinsxu.github.findthebug.model.BugNameGenerator;
-import io.jenkinsxu.github.findthebug.model.File;
 import io.jenkinsxu.github.findthebug.model.FileManager;
 
 public class GameActivity extends AppCompatActivity {
@@ -143,7 +142,7 @@ public class GameActivity extends AppCompatActivity {
         Log.e("Update click count", row + ", " + col + " to " + currentButtonClickCount);
 
         if (fileManager.containsBugAt(row, col)) {
-
+            vibrateForTheLengthOf(20);
             if (currentButtonClickCount == 1) {
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
                         "#f0518e")));
@@ -168,6 +167,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         } else {
+            vibrateForTheLengthOf(5);
             if (currentButtonClickCount == 1) {
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
                         "#7a41fa")));
@@ -283,5 +283,17 @@ public class GameActivity extends AppCompatActivity {
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, GameActivity.class);
+    }
+
+    // Citation: https://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate
+    private void vibrateForTheLengthOf(int duration) {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(duration);
+        }
     }
 }

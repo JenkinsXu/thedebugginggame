@@ -44,7 +44,7 @@
         android:padding="16sp"
         android:scaleX="0.8"
         android:scaleY="0.8"
-        android:translationX="-100dp"
+        android:translationX="-120dp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bugs_in_file" />

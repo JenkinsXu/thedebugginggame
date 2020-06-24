@@ -58,7 +58,6 @@ public class WelcomeAvtivity extends AppCompatActivity {
         logo.setAnimation(topAnim);
         name.setAnimation(topAnim);
 
-
         mHandler.postDelayed(endAnimationRunnable, SPLASH_SCREEN);
     }
 
