@@ -32,18 +32,21 @@ import java.text.DecimalFormat;
 import io.jenkinsxu.github.findthebug.model.BugNameGenerator;
 import io.jenkinsxu.github.findthebug.model.FileManager;
 
+/**
+ * GameActivity is for the game play. It works with the game
+ * model classes to interact with the user.
+ */
 public class GameActivity extends AppCompatActivity {
 
     private static int NUM_ROWS = 4;
     private static int NUM_COLS = 6;
     private static int NUM_BUGS = 6;
     private FileManager fileManager;
-
-    FloatingActionButton buttons[][];
     Integer buttonsClickCount[][];
     private int totalBugs;
     private int totalScans = 0;
 
+    FloatingActionButton buttons[][];
     TextView bugCount;
     TextView scanCount;
 
@@ -58,6 +61,10 @@ public class GameActivity extends AppCompatActivity {
         setGridSize();
         setBugsNumber();
         populateButtons();
+        setupViews();
+    }
+
+    private void setupViews() {
         bugCount = (TextView)findViewById(R.id.bugCount);
         scanCount = (TextView)findViewById(R.id.scanCount);
         bugCount.setText(totalBugs + "/" + NUM_BUGS);
@@ -70,7 +77,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setGridSize() {
-        // Refresh bug count
         int size = OptionActivity.getGridSize(this);
         switch (size) {
             case 24:
@@ -109,30 +115,34 @@ public class GameActivity extends AppCompatActivity {
                 final int FINAL_COL = col;
 
                 buttonsClickCount[row][col] = 0;
-
-                FloatingActionButton button = new FloatingActionButton(this);
-                TableRow.LayoutParams buttonLayoutParams = new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        1.0f);
-                int marginSize = getButtonMargin();
-                buttonLayoutParams.setMargins(marginSize, marginSize, marginSize, marginSize);
-                button.setLayoutParams(buttonLayoutParams);
-                button.setScaleType(ImageView.ScaleType.CENTER);
-                button.setImageDrawable(
-                        ContextCompat.getDrawable(this, R.drawable.ic_folder));
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gridButtonClicked(FINAL_ROW, FINAL_COL);
-                    }
-                });
-
+                FloatingActionButton button = getFloatingActionButton(FINAL_ROW, FINAL_COL);
                 tableRow.addView(button);
                 buttons[row][col] = button;
             }
         }
+    }
+
+    private FloatingActionButton getFloatingActionButton(final int FINAL_ROW, final int FINAL_COL) {
+        FloatingActionButton button = new FloatingActionButton(this);
+        TableRow.LayoutParams buttonLayoutParams = new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT,
+                1.0f);
+
+        int marginSize = getButtonMargin();
+        buttonLayoutParams.setMargins(marginSize, marginSize, marginSize, marginSize);
+        button.setLayoutParams(buttonLayoutParams);
+        button.setScaleType(ImageView.ScaleType.CENTER);
+        button.setImageDrawable(
+                ContextCompat.getDrawable(this, R.drawable.ic_folder));
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gridButtonClicked(FINAL_ROW, FINAL_COL);
+            }
+        });
+        return button;
     }
 
     private void gridButtonClicked(int row, int col) {
@@ -143,49 +153,57 @@ public class GameActivity extends AppCompatActivity {
 
         if (fileManager.containsBugAt(row, col)) {
             vibrateForTheLengthOf(20);
-            if (currentButtonClickCount == 1) {
-                button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
-                        "#f0518e")));
-                button.setImageDrawable(
-                        ContextCompat.getDrawable(this, R.drawable.ic_adb));
-                Toast.makeText(
-                        this,
-                        "You handled a " + BugNameGenerator.getRandomBugName() + "!",
-                        Toast.LENGTH_SHORT).show();
-                fileManager.debug(row, col);
-                reduceBugCount();
-
-                // update number
-                for (int rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++) {
-                    for (int columnIndex = 0; columnIndex < NUM_COLS; columnIndex++) {
-                        if (fileManager.hasBeenInvestigatedAt(rowIndex, columnIndex)) {
-                            buttons[rowIndex][columnIndex].setImageBitmap(
-                                    textAsBitmap("" + fileManager.numberOfBugsInTotal(rowIndex, columnIndex),
-                                            70, Color.WHITE));
-                        }
-                    }
-                }
-            }
+            updateBugButton(row, col, button, currentButtonClickCount);
         } else {
             vibrateForTheLengthOf(5);
-            if (currentButtonClickCount == 1) {
-                button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
-                        "#7a41fa")));
+            updateNonBugButton(row, col, button, currentButtonClickCount);
+            animateScan(row, col);
+        }
+    }
+
+    private void updateNonBugButton(int row, int col, FloatingActionButton button, int currentButtonClickCount) {
+        if (currentButtonClickCount == 1) {
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
+                    "#7a41fa")));
+            increaseScanCount();
+            fileManager.markInvestigated(row, col);
+            button.setImageBitmap(
+                    textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
+                            70, Color.WHITE));
+        } else if (currentButtonClickCount == 2) {
+            if (!fileManager.hasBeenInvestigatedAt(row, col)) {
                 increaseScanCount();
                 fileManager.markInvestigated(row, col);
                 button.setImageBitmap(
                         textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
                                 70, Color.WHITE));
-            } else if (currentButtonClickCount == 2) {
-                if (!fileManager.hasBeenInvestigatedAt(row, col)) {
-                    increaseScanCount();
-                    fileManager.markInvestigated(row, col);
-                    button.setImageBitmap(
-                            textAsBitmap("" + fileManager.numberOfBugsInTotal(row, col),
-                                    70, Color.WHITE));
+            }
+        }
+    }
+
+    private void updateBugButton(int row, int col, FloatingActionButton button, int currentButtonClickCount) {
+        if (currentButtonClickCount == 1) {
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(
+                    "#f0518e")));
+            button.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.ic_adb));
+            Toast.makeText(
+                    this,
+                    "You handled a " + BugNameGenerator.getRandomBugName() + "!",
+                    Toast.LENGTH_SHORT).show();
+            fileManager.debug(row, col);
+            reduceBugCount();
+
+            // update number
+            for (int rowIndex = 0; rowIndex < NUM_ROWS; rowIndex++) {
+                for (int columnIndex = 0; columnIndex < NUM_COLS; columnIndex++) {
+                    if (fileManager.hasBeenInvestigatedAt(rowIndex, columnIndex)) {
+                        buttons[rowIndex][columnIndex].setImageBitmap(
+                                textAsBitmap("" + fileManager.numberOfBugsInTotal(rowIndex, columnIndex),
+                                        70, Color.WHITE));
+                    }
                 }
             }
-            animateScan(row, col);
         }
     }
 
