@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * HelpActivity is for the menu screen. Other
+ * Activities can be launched through this class.
+ */
 public class MenuActivity extends AppCompatActivity {
 
     @Override
@@ -15,41 +19,22 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        setupStartButton();
-        setupOptionsButton();
-        setupHelpButton();
+        Intent intent = GameActivity.makeIntent(MenuActivity.this);
+        setupButtonForLaunch(R.id.start_button, intent);
+
+        intent = OptionActivity.makeIntent(MenuActivity.this);
+        setupButtonForLaunch(R.id.option_button, intent);
+
+        intent = HelpActivity.makeIntent(MenuActivity.this);
+        setupButtonForLaunch(R.id.help_button, intent);
+
     }
 
-    // TODO: Clean up duplicate code
-
-    private void setupStartButton() {
-        Button button = (Button) findViewById(R.id.startButton);
+    private void setupButtonForLaunch(int id, final Intent intent) {
+        Button button = (Button) findViewById(id);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = GameActivity.makeIntent(MenuActivity.this);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupOptionsButton() {
-        Button button = (Button) findViewById(R.id.optionButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = OptionActivity.makeIntent(MenuActivity.this);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupHelpButton() {
-        Button button = (Button) findViewById(R.id.helpButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = HelpActivity.makeIntent(MenuActivity.this);
                 startActivity(intent);
             }
         });
