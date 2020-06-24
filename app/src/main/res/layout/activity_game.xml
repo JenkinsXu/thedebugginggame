@@ -11,13 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="32dp"
         android:rotation="-90"
         android:text="Bugs"
-        app:layout_constraintBottom_toTopOf="@+id/scanLabel"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.496" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/bugCount"
@@ -40,7 +38,7 @@
         android:text="Scans"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <TextView
         android:id="@+id/scanCount"
@@ -54,30 +52,6 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/scanLabel"
         app:layout_constraintStart_toEndOf="@+id/scanLabel" />
 
-    <TextView
-        android:id="@+id/timeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:rotation="-90"
-        android:text="Time"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanLabel"
-        app:layout_constraintVertical_bias="0.503" />
-
-    <TextView
-        android:id="@+id/timeValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:rotation="-90"
-        android:text="0000"
-        android:textColor="#04DAC6"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/timeLabel"
-        app:layout_constraintStart_toEndOf="@+id/timeLabel" />
-
     <TableLayout
         android:id="@+id/tableForButtons"
         android:layout_width="wrap_content"
@@ -87,8 +61,15 @@
         android:stretchColumns="*"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/timeValue"
+        app:layout_constraintStart_toEndOf="@+id/bugCount"
         app:layout_constraintTop_toTopOf="parent">
 
     </TableLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="205dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
