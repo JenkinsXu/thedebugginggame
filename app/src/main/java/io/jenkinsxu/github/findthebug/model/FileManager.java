@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * FileManager class models the information about
+ * the entire grid of a single game. It supports
+ * generating a random map for the game play and
+ * scanning the map.
+ */
 public class FileManager {
     private List<File> fileList = new ArrayList<>();
     private int numberOfFilesInRow = 0;

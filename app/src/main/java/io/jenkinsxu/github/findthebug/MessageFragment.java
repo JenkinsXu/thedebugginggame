@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+/**
+ * MessageFragment is for displaying the congratulation message
+ * to the user after finishing the game. The fragment is part of
+ * the GameActivity.
+ */
 public class MessageFragment extends AppCompatDialogFragment {
     @NonNull
     @Override

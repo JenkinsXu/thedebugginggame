@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * BugNameGenerator generates a random Exception name
+ * when the user finds a bug for a fun gaming experience.
+ */
 public class BugNameGenerator {
     private static List<String> bugNames = new ArrayList<>(Arrays.asList(
             "ClassNotFoundException",

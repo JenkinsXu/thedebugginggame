@@ -10,14 +10,16 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+/**
+ * Option activity is for adjusting the difficulty of
+ * the game. It works with the gameSettings value file.
+ */
 public class OptionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
-
-//        int savedValue = getGridSize(this);
 
         createGridSizeOptions();
         createBugsNumberOptions();
